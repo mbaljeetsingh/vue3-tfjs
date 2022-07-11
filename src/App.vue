@@ -1,14 +1,36 @@
 <template>
   <div>
     <button @click="openCamera">Open Camera</button>
-    <button @click="analyzeSnapshot">Capture/Analyze Image</button>
+    <!-- <button @click="analyzeSnapshot">Capture/Analyze Image</button> -->
   </div>
-  <video ref="videoRef" autoplay="true" width="300" />
-  <canvas ref="myCanvas" width="600" height="400"></canvas>
+  <div class="video-canvas-container">
+    <video
+      ref="videoRef"
+      autoplay="true"
+      width="600"
+      height="400"
+      class="video-styles"
+    />
+    <canvas
+      ref="myCanvas"
+      width="600"
+      height="400"
+      class="canvas-styles"
+    ></canvas>
+  </div>
 </template>
 
 <style>
 /* @import './assets/base.css'; */
+.video-canvas-container {
+  position: relative;
+}
+.canvas-styles {
+  position: absolute;
+}
+.video-styles {
+  position: absolute;
+}
 </style>
 
 <script setup>
@@ -24,9 +46,14 @@ async function openCamera() {
     navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
       console.log(stream);
       videoRef.value.srcObject = stream;
+
+      setInterval(() => {
+        analyzeSnapshot();
+      }, 1000);
     });
   }
 }
+
 async function analyzeSnapshot() {
   // const img = new Image();
   // img.src = imgSrc;
@@ -37,21 +64,23 @@ async function analyzeSnapshot() {
   // Classify the image.
   const predictions = await model.detect(img);
 
-  console.log('Predictions: ');
+  // console.log('Predictions: ');
   // console.log(predictions);
   drawImage(predictions, img);
 }
 
-function drawImage(predictions, image) {
+// function drawImage(predictions, image) {
+function drawImage(predictions) {
   // const canvas = document.querySelector('#canvas');
   const context = myCanvas.value.getContext('2d');
-  console.log(context);
+  context.clearRect(0, 0, myCanvas.value.width, myCanvas.value.height);
+  // console.log(context);
 
-  context.drawImage(image, 0, 0, myCanvas.value.width, myCanvas.value.height);
+  // context.drawImage(image, 0, 0, myCanvas.value.width, myCanvas.value.height);
   context.font = '12px arial';
 
   predictions.forEach((prediction) => {
-    console.log(prediction);
+    // console.log(prediction);
     context.beginPath();
     context.rect(...prediction.bbox);
     context.lineWidth = 1;
