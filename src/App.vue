@@ -1,8 +1,9 @@
 
 <template>
-   <button @click="loadImage">Analyze Image</button>
+   <button @click="openCamera">Open Camera</button>
+   <button @click="analyzeSnapshot">Capture/Analyze Image</button>
    <canvas ref="myCanvas" width="600" height="400"></canvas>
-  
+  <video ref="videoRef" autoplay="true" width="300" />
 </template>
 
 <style>
@@ -14,13 +15,22 @@
 import '@tensorflow/tfjs-backend-cpu';
 import '@tensorflow/tfjs-backend-webgl';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
-import imgSrc from './assets/test.jpg';
+// import imgSrc from './assets/test.jpg';
 import {ref} from 'vue';
-const img = ref(null);
+const videoRef = ref(null)
 const myCanvas = ref(null);
-async function loadImage() {
-  const img = new Image();
-  img.src = imgSrc;
+async function openCamera() {
+  if (navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({video: true}).then((stream)=>{
+      console.log(stream);
+      videoRef.value.srcObject = stream;
+    })
+  }
+}
+async function analyzeSnapshot() {
+  // const img = new Image();
+  // img.src = imgSrc;
+  const img = videoRef.value;
   // Load the model.
   const model = await cocoSsd.load();
 
