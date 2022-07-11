@@ -1,14 +1,14 @@
-
 <template>
-   <button @click="openCamera">Open Camera</button>
-   <button @click="analyzeSnapshot">Capture/Analyze Image</button>
-   <canvas ref="myCanvas" width="600" height="400"></canvas>
+  <div>
+    <button @click="openCamera">Open Camera</button>
+    <button @click="analyzeSnapshot">Capture/Analyze Image</button>
+  </div>
   <video ref="videoRef" autoplay="true" width="300" />
+  <canvas ref="myCanvas" width="600" height="400"></canvas>
 </template>
 
 <style>
-@import './assets/base.css';
-
+/* @import './assets/base.css'; */
 </style>
 
 <script setup>
@@ -16,15 +16,15 @@ import '@tensorflow/tfjs-backend-cpu';
 import '@tensorflow/tfjs-backend-webgl';
 import * as cocoSsd from '@tensorflow-models/coco-ssd';
 // import imgSrc from './assets/test.jpg';
-import {ref} from 'vue';
-const videoRef = ref(null)
+import { ref } from 'vue';
+const videoRef = ref(null);
 const myCanvas = ref(null);
 async function openCamera() {
   if (navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({video: true}).then((stream)=>{
+    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
       console.log(stream);
       videoRef.value.srcObject = stream;
-    })
+    });
   }
 }
 async function analyzeSnapshot() {
@@ -62,9 +62,8 @@ function drawImage(predictions, image) {
     context.fillText(
       `${prediction.class} (${prediction.score.toFixed(3)})`,
       prediction.bbox[0],
-      prediction.bbox[1],
+      prediction.bbox[1]
     );
   });
 }
 </script>
-
