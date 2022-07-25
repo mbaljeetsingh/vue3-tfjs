@@ -1,6 +1,8 @@
 # vue3-tfjs
 
-This template should help get you started developing with Vue 3 in Vite.
+This repo uses show how machine learning works directly in the web browser via TensorFlow.js to classify and detect common objects using the Object detection model (coco-ssd) from a live webcam stream. This is a sample vue 3 + vite project.
+
+It actually gives the coordinates of the bounding box for each object which I was able to highlight using #canvas in the actual video stream.
 
 ## Recommended IDE Setup
 
